@@ -13,6 +13,7 @@ import com.gmccosta.teste.domain.Cidade;
 import com.gmccosta.teste.domain.Cliente;
 import com.gmccosta.teste.domain.Endereco;
 import com.gmccosta.teste.domain.Estado;
+import com.gmccosta.teste.domain.ItemPedido;
 import com.gmccosta.teste.domain.Pagamento;
 import com.gmccosta.teste.domain.PagamentoComBoleto;
 import com.gmccosta.teste.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.gmccosta.teste.repositories.CidadeRepository;
 import com.gmccosta.teste.repositories.ClienteRepository;
 import com.gmccosta.teste.repositories.EnderecoRepository;
 import com.gmccosta.teste.repositories.EstadoRepository;
+import com.gmccosta.teste.repositories.ItemPedidoRepository;
 import com.gmccosta.teste.repositories.PagamentoRepository;
 import com.gmccosta.teste.repositories.PedidoRepository;
 import com.gmccosta.teste.repositories.ProdutoRepository;
@@ -48,7 +50,9 @@ public class TesteApplication implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
-
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(TesteApplication.class, args);
 	}
@@ -123,5 +127,20 @@ public class TesteApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		// ItemPedido ===================================================================
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 }
